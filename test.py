@@ -12,7 +12,7 @@ if __name__ == "__main__":
     # Create connection object and retrieve file contents.
     # Specify input format is a csv and to cache the result for 600 seconds.
     conn = st.connection('s3', type=FilesConnection)
-    df = conn.read("testbucket-jrieke/myfile.csv", input_format="csv", ttl=600)
+    df = conn.read("wmm2-2024/myfile.csv", input_format="csv", ttl=600)
 
     # Print results.
     for row in df.itertuples():
