@@ -127,8 +127,8 @@ def user_input_page():
 
 # Page routing
 if page == "👤 User Input":
-    user_input_page()
+   user_input_page()
 elif page == "🔗 Contact Network Infections":
-    contactnetwork.show_contact_network()  # Call the function from the contactnetwork module
+   contactnetwork.show_contact_network()  # Call the function from the contactnetwork module
 elif page == "📈 Cases Over Time":
-    casesovertime.show_cases_over_time()  # Call the function from the casesovertime module
+   casesovertime.show_cases_over_time()  # Call the function from the casesovertime module

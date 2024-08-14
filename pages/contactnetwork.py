@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import networkx as nx
 from pyvis.network import Network
 
+
 def show_contact_network():
     st.title('Contact Network')
     st.markdown('Visualize how people have infected each other within Lehigh University.')
@@ -80,15 +81,15 @@ def show_contact_network():
     def create_pyvis_network(graph, node_colors=None):
         # Set background to white and default node color to black
         net = Network(height='750px', width='100%', bgcolor='white', font_color='black', directed=True)
-        
+
         for node in graph.nodes:
             # If node_colors is provided, use those; otherwise, default to black
             color = node_colors.get(node, 'black') if node_colors else 'black'
             net.add_node(node, label=node, color=color)
-        
+
         for edge in graph.edges:
             net.add_edge(edge[0], edge[1], width=2)
-        
+
         return net
 
 
@@ -129,11 +130,11 @@ def show_contact_network():
             infected_count = df[df['Infector'] == search_user].shape[0]
             infection_dates = df[df['Infector'] == search_user]['Timestamp']
             first_infection = infection_dates.min() if not infection_dates.empty else "No infections"
-            
+
             st.markdown(f"**User: {search_user}**")
             st.markdown(f"- Number of people infected: **{infected_count}**")
             st.markdown(f"- First infection date: **{first_infection}**")
-            
+
             # Assign colors to nodes
             node_colors = {search_user: 'blue'}
             for node in primary_contacts:
@@ -141,11 +142,11 @@ def show_contact_network():
             for node in subgraph.nodes:
                 if node not in node_colors:
                     node_colors[node] = 'gray'
-            
+
             # Visualize subgraph
             subgraph_net = create_pyvis_network(subgraph, node_colors)
             subgraph_net.save_graph('subgraph.html')
-            
+
             display_pyvis_network('subgraph.html')
 
             st.markdown("**Color Coding in the Subgraph:**")
@@ -158,3 +159,8 @@ def show_contact_network():
     # Show the generated data
     st.markdown("### Generated Contact Data")
     st.dataframe(df)
+
+if __name__ == "__main__":
+
+    show_contact_network()
+
