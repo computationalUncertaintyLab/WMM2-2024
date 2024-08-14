@@ -84,6 +84,4 @@ def show_cases_over_time():
         st.error("No dataset found. Please generate the dataset from the Contact Network page first.")
 
 if __name__ == "__main__":
-
-    #st.set_page_config(page_title="Cases over time")
     show_cases_over_time()
