@@ -7,3 +7,4 @@ streamlit_player==0.1.5
 networkx
 pyvis
 plotly
+s3fs
