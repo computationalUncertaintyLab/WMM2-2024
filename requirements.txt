@@ -5,3 +5,4 @@ st_files_connection==0.1.0
 streamlit==1.35.0
 streamlit_player==0.1.5
 networkx
+pyvis
