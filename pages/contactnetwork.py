@@ -10,44 +10,45 @@ def show_contact_network():
     st.markdown('Visualize how people have infected each other within Lehigh University.')
 
     # Function to generate a random identifier following the specified regex patterns
-    def generate_random_id():
-        if random.choice([True, False]):
-            return ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=3)) + ''.join(random.choices('0123456789', k=3))
-        else:
-            return ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=2)) + ''.join(random.choices('0123456789', k=2))
+    # def generate_random_id():
+    #     if random.choice([True, False]):
+    #         return ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=3)) + ''.join(random.choices('0123456789', k=3))
+    #     else:
+    #         return ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=2)) + ''.join(random.choices('0123456789', k=2))
 
     # Generate a fake dataset with some linked nodes
-    def generate_fake_dataset(num_entries, overlap_ratio=0.3):
-        unique_ids = [generate_random_id() for _ in range(int(num_entries * (1 - overlap_ratio)))]
-        overlap_ids = [generate_random_id() for _ in range(int(num_entries * overlap_ratio))]
+    # def generate_fake_dataset(num_entries, overlap_ratio=0.3):
+    #     unique_ids = [generate_random_id() for _ in range(int(num_entries * (1 - overlap_ratio)))]
+    #     overlap_ids = [generate_random_id() for _ in range(int(num_entries * overlap_ratio))]
 
-        data = []
-        # Ensure overlap: some nodes are infectors in some cases and infectees in others
-        for i in range(len(overlap_ids)):
-            infector = overlap_ids[i]
-            infectee = random.choice(unique_ids + overlap_ids)
-            if infector != infectee:
-                data.append((infector, infectee, generate_random_timestamp()))
+    #     data = []
+    #     # Ensure overlap: some nodes are infectors in some cases and infectees in others
+    #     for i in range(len(overlap_ids)):
+    #         infector = overlap_ids[i]
+    #         infectee = random.choice(unique_ids + overlap_ids)
+    #         if infector != infectee:
+    #             data.append((infector, infectee, generate_random_timestamp()))
 
-        # Add remaining isolated nodes
-        for _ in range(num_entries - len(data)):
-            infector = generate_random_id()
-            infectee = generate_random_id()
-            if infector != infectee:
-                data.append((infector, infectee, generate_random_timestamp()))
+    #     # Add remaining isolated nodes
+    #     for _ in range(num_entries - len(data)):
+    #         infector = generate_random_id()
+    #         infectee = generate_random_id()
+    #         if infector != infectee:
+    #             data.append((infector, infectee, generate_random_timestamp()))
 
-        return pd.DataFrame(data, columns=['Infector', 'Infectee', 'Timestamp'])
+    #     return pd.DataFrame(data, columns=['Infector', 'Infectee', 'Timestamp'])
 
     # Function to generate a random timestamp within the last year
-    def generate_random_timestamp():
-        end_date = datetime.now()
-        start_date = end_date - timedelta(days=365)
-        random_date = start_date + (end_date - start_date) * random.random()
-        return random_date.strftime('%Y-%m-%d %H:%M:%S')
+    # def generate_random_timestamp():
+    #     end_date = datetime.now()
+    #     start_date = end_date - timedelta(days=365)
+    #     random_date = start_date + (end_date - start_date) * random.random()
+    #     return random_date.strftime('%Y-%m-%d %H:%M:%S')
 
     # Initialize session state if not already done
     if 'dataset' not in st.session_state:
-        st.session_state.dataset = generate_fake_dataset(30)
+        st.warning(f"No Infections entered yet")
+        #st.session_state.dataset = generate_fake_dataset(30)
 
     # Retrieve dataset
     df = st.session_state.dataset
