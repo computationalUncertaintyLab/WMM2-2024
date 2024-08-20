@@ -41,6 +41,14 @@ def user_input_page():
         st.session_state.page_load_time = datetime.now()
         st.session_state.submit_enabled = False
 
+    #--Attach dataset to session while they watch video
+    st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
+                                            ,storage_options={
+                                                "key"   : AWS_ACCESS_KEY_ID,
+                                                "secret": AWS_SECRET_ACCESS_KEY,
+                                            }
+                                           )
+        
     # Calculate the elapsed time since the page was loaded
     elapsed_time = datetime.now() - st.session_state.page_load_time
 
@@ -98,6 +106,16 @@ def user_input_page():
                         df['Date'] = df['Timestamp'].dt.date
 
                         st.session_state.dataset = df
+
+                        #--write out
+                        st.session_state.dataset.to_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
+                                                        , index=False
+                                                        , storage_options={
+                                                            "key"   : AWS_ACCESS_KEY_ID,
+                                                            "secret": AWS_SECRET_ACCESS_KEY,
+                                                        },
+                                                    )
+                        
                         st.success("Thank you for submitting your information to WMM2. Emails have been stored successfully!")
                     else:
                         if not valid_infectee:

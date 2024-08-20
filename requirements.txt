@@ -1,6 +1,10 @@
 boto3==1.34.125
-numpy==2.0.1
+numpy
 pandas==2.2.2
 st_files_connection==0.1.0
-streamlit==1.35.0
+streamlit==1.32
 streamlit_player==0.1.5
+networkx
+pyvis
+plotly
+s3fs
