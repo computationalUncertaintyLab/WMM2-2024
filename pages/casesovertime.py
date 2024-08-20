@@ -32,7 +32,7 @@ def show_cases_over_time():
             x=daily_cases['Date'], y=daily_cases['Cumulative Cases'],
             mode='lines+markers',
             name='Cumulative Cases',
-            marker=dict(color='blue'),
+            marker=dict(color='black'),
             text=[f"Total Cases: {cases}" for cases in daily_cases['Cumulative Cases']],
             hoverinfo='text+x'
         ))
