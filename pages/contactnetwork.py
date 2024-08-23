@@ -48,13 +48,18 @@ def show_contact_network():
 
     # Initialize session state if not already done
     if 'dataset' not in st.session_state:
-        st.warning(f"No Infections entered yet")
-        #st.session_state.dataset = generate_fake_dataset(30)
+        AWS_S3_BUCKET = "wmm2-2024"
+        AWS_ACCESS_KEY_ID = st.secrets["AWS_ACCESS_KEY_ID"]
+        AWS_SECRET_ACCESS_KEY = st.secrets["AWS_SECRET_ACCESS_KEY"]
 
-    # Retrieve dataset
-
-    if 'dataset' in st.session_state:
-        df = st.session_state.dataset
+        s3_client = boto3.client(
+            "s3",
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+        )
+        st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
+                                               ,storage_options={"key"   : AWS_ACCESS_KEY_ID,"secret": AWS_SECRET_ACCESS_KEY})
+    df = st.session_state.dataset
 
     # Combine the generated dataset with any submitted data
     if 'submitted_data' in st.session_state:
