@@ -4,9 +4,6 @@ import numpy as np
 import plotly.graph_objects as go
 
 def show_cases_over_time():
-    st.title('Cases Over Time')
-    st.markdown('Visualize how cases have changed over time.')
-
     # Check if dataset is available in session state
     if 'dataset' in st.session_state:
         df = st.session_state.dataset

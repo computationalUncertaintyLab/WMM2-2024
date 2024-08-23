@@ -107,7 +107,7 @@ def show_contact_network():
 
     # Search for a user and display their contact network
     st.markdown("### Search for a User")
-    search_user = st.text_input("Enter a user ID to see their infection details")
+    search_user = st.text_input("Enter a username to see their infection details")
 
     # Create subgraph for the searched user
     def create_subgraph(G, search_user):
@@ -157,7 +157,7 @@ def show_contact_network():
             st.markdown(f"User '{search_user}' not found in the network.")
 
     # Show the generated data
-    st.markdown("### Generated Contact Data")
+    st.markdown("### Contact Data")
     st.dataframe(df)
 
 if __name__ == "__main__":

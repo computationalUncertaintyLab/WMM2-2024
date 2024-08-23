@@ -27,16 +27,18 @@ def validate_input(email):
 
 def user_input_page():
     # WMM webpage
-    st.title('Watermelon Meow Meow Host Site')
-    st.markdown('This website is designed to track infections of the fictitious Watermelon Meow Meow outbreak within Lehigh University. Please include your Lehigh email below, as well as the Lehigh email of whoever showed this video to you. We appreciate your help!')
-
+    st.title('Add an infectious event')
+    st.markdown('''Include your Lehigh username in the box titled **infector** and include the Lehigh username of the person that you infected in the **infectee** box.
+    A Lehigh username is the letters and numbers before @lehigh.edu. For example, the Lehigh username for thm220@lehigh.edu is thm220. 
+    
+''')
+    
     # URL of the YouTube video to embed
     st_player('https://www.youtube.com/watch?v=ZSRfbByt4uk')
 
-    st.write('**When providing the two Lehigh emails below, please only include the characters and numbers preceding the @lehigh.edu**')
-    infecteeEmail = st.text_input("Your Lehigh Email credentials (the person who watched the video): ex. nep225", key="infecteeEmail")
-    infectorEmail = st.text_input("Lehigh Email credentials of the person who infected you (the person who sent you the video): ex. thm220", key="infectorEmail")
-    st.markdown('By pressing submit, you are aware and consent that your Lehigh email will appear on this public website.')
+    infecteeEmail = st.text_input("Infectee (i was infected)", key="infecteeEmail", placeholder = "ABC123", help = "Put your username here if you were infected")
+    infectorEmail = st.text_input("Infector (i am the one who infected)", key="infectorEmail", placeholder = "ABC123", help = "Put your username here if you infected someone ")
+    st.markdown('By pressing submit, you are aware and consent that your Lehigh username will appear on this public website.')
 
     # Initialize session state to track page load time
     if 'page_load_time' not in st.session_state:
