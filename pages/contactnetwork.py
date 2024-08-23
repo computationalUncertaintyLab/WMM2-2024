@@ -52,7 +52,9 @@ def show_contact_network():
         #st.session_state.dataset = generate_fake_dataset(30)
 
     # Retrieve dataset
-    df = st.session_state.dataset
+
+    if 'dataset' in st.session_state:
+        df = st.session_state.dataset
 
     # Combine the generated dataset with any submitted data
     if 'submitted_data' in st.session_state:
