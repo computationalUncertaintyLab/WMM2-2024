@@ -16,7 +16,7 @@ if page == "🏠 Home":
 
 # Page routing
 elif page == "👤 User Input":
-    infections.show_infections_page()  # Call the function from infections.py
+    infections.user_input_page()  # Call the function from infections.py
 elif page == "🔗 Contact Network Infections":
     contactnetwork.show_contact_network()  # Call the function from contactnetwork.py
 elif page == "📈 Cases Over Time":
