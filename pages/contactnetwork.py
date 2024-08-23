@@ -59,7 +59,8 @@ def show_contact_network():
         )
         st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
                                                ,storage_options={"key"   : AWS_ACCESS_KEY_ID,"secret": AWS_SECRET_ACCESS_KEY})
-    df = st.session_state.dataset
+    if 'dataset' in st.session_state:
+        df = st.session_state.dataset
 
     # Combine the generated dataset with any submitted data
     if 'submitted_data' in st.session_state:
