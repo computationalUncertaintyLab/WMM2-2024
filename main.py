@@ -8,7 +8,6 @@ import pandas as pd
 
 if __name__ == "__main__":
 
-
     # Sidebar navigation
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["🏠 Home", "👤 User Input", "🔗 Contact Network Infections", "📈 Cases Over Time"])
@@ -52,12 +51,9 @@ if __name__ == "__main__":
         )
 
         #--Attach dataset to session while they watch video
-        st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
-                                                ,storage_options={
-                                                    "key"   : AWS_ACCESS_KEY_ID,
-                                                    "secret": AWS_SECRET_ACCESS_KEY,
-                                                }
-                                               )
+        if 'dataset' not in st.session_state:
+            st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
+                                                   ,storage_options={"key"   : AWS_ACCESS_KEY_ID,"secret": AWS_SECRET_ACCESS_KEY})
 
 
     # Page routing
