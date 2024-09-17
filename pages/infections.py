@@ -46,7 +46,7 @@ def user_input_page():
         st.session_state.submit_enabled = False
 
     #--Attach dataset to session while they watch video
-    st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
+    st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_live.csv"
                                             ,storage_options={
                                                 "key"   : AWS_ACCESS_KEY_ID,
                                                 "secret": AWS_SECRET_ACCESS_KEY,
@@ -112,7 +112,7 @@ def user_input_page():
                         st.session_state.dataset = df
 
                         #--write out
-                        st.session_state.dataset.to_csv(f"s3://{AWS_S3_BUCKET}/wmm_test.csv"
+                        st.session_state.dataset.to_csv(f"s3://{AWS_S3_BUCKET}/wmm_live.csv"
                                                         , index=False
                                                         , storage_options={
                                                             "key"   : AWS_ACCESS_KEY_ID,
