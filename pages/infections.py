@@ -39,6 +39,8 @@ def user_input_page():
     infecteeEmail = st.text_input("Infectee (i was infected)", key="infecteeEmail", placeholder = "ABC123", help = "Put your username here if you were infected")
     infectorEmail = st.text_input("Infector (i am the one who infected)", key="infectorEmail", placeholder = "ABC123", help = "Put your username here if you infected someone ")
     st.markdown('By pressing submit, you are aware and consent that your Lehigh username will appear on this public website.')
+    infecteeEmail = infecteeEmail.lower()
+    infectorEmail = infectorEmail.lower()
 
     # Initialize session state to track page load time
     if 'page_load_time' not in st.session_state:
