@@ -25,7 +25,7 @@ def show_cases_over_time():
     # Convert Timestamp to datetime
     def from_datetime_to_hourly(x):
         from datetime import datetime, timedelta
-        dt = datetime.strptime(x.Timestamp,"%Y-%m-%d %H:%M:%S")
+        dt = datetime.strptime( str(x.Timestamp),"%Y-%m-%d %H:%M:%S")
         return dt.strftime("%Y-%m-%d %H")
     df["Hour"] = df.apply( from_datetime_to_hourly, 1 )
     
