@@ -23,11 +23,18 @@ def show_cases_over_time():
     df = st.session_state.dataset
 
     # Convert Timestamp to datetime
+    def from_datetime_to_hourly(x):
+        from datetime import datetime, timedelta
+        dt = datetime.strptime(x.Timestamp,"%Y-%m-%d %H:%M:%S")
+        return dt.strftime("%Y-%m-%d %H")
+    df["Hour"] = df.apply( from_datetime_to_hourly, 1 )
+    
     df['Timestamp'] = pd.to_datetime(df['Timestamp'])
-
+    
     # Group by date and count the number of cases per day
-    df['Date'] = df['Timestamp'].dt.date
-    daily_cases = df.groupby('Date').size().reset_index(name='Cases')
+    #df['Date']  = df['Timestamp'].dt.date
+    #daily_cases = df.groupby('Date').size().reset_index(name='Cases')
+    daily_cases = df.groupby('Hour').size().reset_index(name='Cases')
 
     # Create a cumulative sum of cases
     daily_cases['Cumulative Cases'] = daily_cases['Cases'].cumsum()
@@ -40,7 +47,7 @@ def show_cases_over_time():
     st.markdown(f"##### Total: {total_cases} cases")
     fig_cumulative = go.Figure()
     fig_cumulative.add_trace(go.Scatter(
-        x=daily_cases['Date'], y=daily_cases['Cumulative Cases'],
+        x=daily_cases['Hour'], y=daily_cases['Cumulative Cases'],
         mode='lines+markers',
         name='Cumulative Cases',
         marker=dict(color='black'),
@@ -51,7 +58,7 @@ def show_cases_over_time():
         xaxis_title="Date",
         yaxis_title="Cumulative Cases",
         annotations=[{
-            'x': daily_cases['Date'].iloc[-1],
+            'x': daily_cases['Hour'].iloc[-1],
             'y': total_cases,
             'xref': 'x', 'yref': 'y',
             'text': f"Total: {total_cases}",
@@ -64,11 +71,11 @@ def show_cases_over_time():
     st.plotly_chart(fig_cumulative)
 
     # Plot the raw daily cases data points using Plotly
-    st.markdown(f"### Daily Cases")
+    st.markdown(f"### Hourly Cases")
     st.markdown(f"##### Total: {total_cases} cases")
     fig_daily = go.Figure()
     fig_daily.add_trace(go.Bar(
-        x=daily_cases['Date'], y=daily_cases['Cases'],
+        x=daily_cases['Hour'], y=daily_cases['Cases'],
         name='Daily Cases',
         marker=dict(color='black'),
         text=[f"Cases: {cases}" for cases in daily_cases['Cases']],
@@ -76,9 +83,9 @@ def show_cases_over_time():
     ))
     fig_daily.update_layout(
         xaxis_title="Date",
-        yaxis_title="Daily Cases",
+        yaxis_title="Hourly Cases",
         annotations=[{
-            'x': daily_cases['Date'].iloc[-1],
+            'x': daily_cases['Hour'].iloc[-1],
             'y': daily_cases['Cases'].max(),
             'xref': 'x', 'yref': 'y',
             'text': f"Total: {total_cases}",
