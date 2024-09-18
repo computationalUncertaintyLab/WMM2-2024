@@ -2,10 +2,24 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import boto3
 
 def show_cases_over_time():
+    
     # Check if dataset is available in session state
-    if 'dataset' in st.session_state:
+    if 'dataset' not in st.session_state:
+        AWS_S3_BUCKET = "wmm2-2024"
+        AWS_ACCESS_KEY_ID = st.secrets["AWS_ACCESS_KEY_ID"]
+        AWS_SECRET_ACCESS_KEY = st.secrets["AWS_SECRET_ACCESS_KEY"]
+
+        s3_client = boto3.client(
+            "s3",
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY
+        )
+        st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_live.csv"
+                                               ,storage_options={"key"   : AWS_ACCESS_KEY_ID,"secret": AWS_SECRET_ACCESS_KEY})
+    else:
         df = st.session_state.dataset
 
         # Convert Timestamp to datetime
@@ -77,8 +91,6 @@ def show_cases_over_time():
         st.plotly_chart(fig_daily)
 
         st.write(daily_cases)
-    else:
-        st.error("No dataset found. Please generate the dataset from the Contact Network page first.")
 
 if __name__ == "__main__":
     show_cases_over_time()
