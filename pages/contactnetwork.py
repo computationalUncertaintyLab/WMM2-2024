@@ -4,49 +4,14 @@ import random
 from datetime import datetime, timedelta
 import networkx as nx
 from pyvis.network import Network
+import boto3
 
 
 def show_contact_network():
     st.title('Contact Network')
     st.markdown('Visualize how people have infected each other within Lehigh University.')
 
-    # Function to generate a random identifier following the specified regex patterns
-    # def generate_random_id():
-    #     if random.choice([True, False]):
-    #         return ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=3)) + ''.join(random.choices('0123456789', k=3))
-    #     else:
-    #         return ''.join(random.choices('abcdefghijklmnopqrstuvwxyz', k=2)) + ''.join(random.choices('0123456789', k=2))
-
-    # Generate a fake dataset with some linked nodes
-    # def generate_fake_dataset(num_entries, overlap_ratio=0.3):
-    #     unique_ids = [generate_random_id() for _ in range(int(num_entries * (1 - overlap_ratio)))]
-    #     overlap_ids = [generate_random_id() for _ in range(int(num_entries * overlap_ratio))]
-
-    #     data = []
-    #     # Ensure overlap: some nodes are infectors in some cases and infectees in others
-    #     for i in range(len(overlap_ids)):
-    #         infector = overlap_ids[i]
-    #         infectee = random.choice(unique_ids + overlap_ids)
-    #         if infector != infectee:
-    #             data.append((infector, infectee, generate_random_timestamp()))
-
-    #     # Add remaining isolated nodes
-    #     for _ in range(num_entries - len(data)):
-    #         infector = generate_random_id()
-    #         infectee = generate_random_id()
-    #         if infector != infectee:
-    #             data.append((infector, infectee, generate_random_timestamp()))
-
-    #     return pd.DataFrame(data, columns=['Infector', 'Infectee', 'Timestamp'])
-
-    # Function to generate a random timestamp within the last year
-    # def generate_random_timestamp():
-    #     end_date = datetime.now()
-    #     start_date = end_date - timedelta(days=365)
-    #     random_date = start_date + (end_date - start_date) * random.random()
-    #     return random_date.strftime('%Y-%m-%d %H:%M:%S')
-
-    # Initialize session state if not already done
+     # Initialize session state if not already done
     if 'dataset' not in st.session_state:
         AWS_S3_BUCKET = "wmm2-2024"
         AWS_ACCESS_KEY_ID = st.secrets["AWS_ACCESS_KEY_ID"]
@@ -59,9 +24,10 @@ def show_contact_network():
         )
         st.session_state.dataset = pd.read_csv(f"s3://{AWS_S3_BUCKET}/wmm_live.csv"
                                                ,storage_options={"key"   : AWS_ACCESS_KEY_ID,"secret": AWS_SECRET_ACCESS_KEY})
+
     if 'dataset' in st.session_state:
         df = st.session_state.dataset
-
+        
     # Combine the generated dataset with any submitted data
     if 'submitted_data' in st.session_state:
         submitted_data = st.session_state.submitted_data
@@ -70,20 +36,10 @@ def show_contact_network():
     else:
         st.session_state.submitted_data = pd.DataFrame(columns=['Infector', 'Infectee', 'Timestamp'])
 
-    # Debug: Print the combined dataset
-    # st.write("Combined dataset after adding submitted data:")
-    # st.dataframe(df)
-
     # Create a directed graph from the dataset
     G = nx.DiGraph()
     for _, row in df.iterrows():
         G.add_edge(row['Infector'], row['Infectee'], timestamp=row['Timestamp'])
-
-    # Debug: Print graph nodes and edges
-    # st.write("Graph nodes:")
-    # st.write(list(G.nodes))
-    # st.write("Graph edges:")
-    # st.write(list(G.edges))
 
     # Create a PyVis network
     def create_pyvis_network(graph, node_colors=None):
