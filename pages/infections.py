@@ -24,8 +24,8 @@ def validate_input(email):
     pattern1 = r'^[A-Za-z]{3}\d{3}$'
     pattern2 = r'^[A-Za-z]{2}\d{2}$'
     pattern3 = r'^[A-Za-z]{2}\d{1}$'
-    
-    return re.match(pattern1, email) or re.match(pattern2, email) or re.match(pattern3, email)
+    pattern4 = r'^[A-Za-z]{3}\d{1}$'
+    return re.match(pattern1, email) or re.match(pattern2, email) or re.match(pattern3, email) or re.match(pattern4, email)
 
 def user_input_page():
     # WMM webpage
