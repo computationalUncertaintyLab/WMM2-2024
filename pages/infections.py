@@ -21,12 +21,8 @@ s3_client = boto3.client(
 
 # Email validation function
 def validate_input(email):
-    pattern1 = r'^[A-Za-z]{3}\d{3}$'
-    pattern2 = r'^[A-Za-z]{2}\d{2}$'
-    pattern3 = r'^[A-Za-z]{2}\d{1}$'
-    pattern4 = r'^[A-Za-z]{3}\d{1}$'
-    
-    return re.match(pattern1, email) or re.match(pattern2, email) or re.match(pattern3, email) or re.match(pattern4, email)
+    pattern = r'^[A-Za-z]+\d+$'
+    return re.match(pattern, email)
 
 def user_input_page():
     # WMM webpage
@@ -42,8 +38,8 @@ def user_input_page():
     infecteeEmail = st.text_input("Infectee (i was infected)", key="infecteeEmail", placeholder = "ABC123", help = "Put your username here if you were infected")
     infectorEmail = st.text_input("Infector (i am the one who infected)", key="infectorEmail", placeholder = "ABC123", help = "Put your username here if you infected someone ")
     st.markdown('By pressing submit, you are aware and consent that your Lehigh username will appear on this public website.')
-    infecteeEmail = infecteeEmail.lower()
-    infectorEmail = infectorEmail.lower()
+    infecteeEmail = infecteeEmail.lower().strip()
+    infectorEmail = infectorEmail.lower().strip()
 
     # Initialize session state to track page load time
     if 'page_load_time' not in st.session_state:
