@@ -22,7 +22,8 @@ s3_client = boto3.client(
 # Email validation function
 def validate_input(email):
     pattern = r'^[A-Za-z]+\d+$'
-    return re.match(pattern, email)
+    pattern2 = r'^[A-Za-z]+\d+[A-Za-z]+$'
+    return re.match(pattern, email) or re.match(pattern2, email)
 
 def user_input_page():
     # WMM webpage
