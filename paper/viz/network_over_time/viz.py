@@ -44,7 +44,7 @@ if __name__ == "__main__":
               , connectionstyle="arc3,rad=0.15" # Curved edges
               , ax = ax
     )
-    ax.set_title("Infections up until 9/18")
+    ax.set_title("Infections up until 9/18",fontdict={"family": "Arial", "size": 11})
 
     
     ax = axs[1]
@@ -64,7 +64,7 @@ if __name__ == "__main__":
               , connectionstyle="arc3,rad=0.15" # Curved edges
               , ax = ax
     )
-    ax.set_title("Infections up until 9/25")
+    ax.set_title("Infections up until 9/25",fontdict={"family": "Arial", "size": 11})
 
     ax = axs[2]
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
               , connectionstyle="arc3,rad=0.15" # Curved edges
               , ax = ax
     )
-    ax.set_title("All Infections")
+    ax.set_title("All Infections",fontdict={"family": "Arial", "size": 11})
     
 
     fig.set_size_inches( 6.5, (11-2)/3 )
