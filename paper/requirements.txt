@@ -6,3 +6,5 @@ pandas
 epiweeks
 matplotlib
 numpyro
+statsmodels
+scienceplots
