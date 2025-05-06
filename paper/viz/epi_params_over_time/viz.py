@@ -30,8 +30,7 @@ if __name__ == "__main__":
 
 
     fig = plt.figure()
-    gs = GridSpec(3, 2)
-
+    gs = GridSpec(3, 2, height_ratios = [4,1,1])
 
     #-----------------------------------------------------------------------
     ax = fig.add_subplot(gs[0,0])
@@ -57,11 +56,13 @@ if __name__ == "__main__":
     
     ax.set_xticks([0,1,2])
     ax.set_xticklabels(["1","10","100"])
-    ax.set_xlabel("Number of infections",fontsize=10)
-    
-    ax.set_yticks([0,-1,-2])
+    ax.set_xlabel("Number of infections",fontsize=10,labelpad=0.01)
+
+
+    ax.set_ylim(-3,0)
+    ax.set_yticks([0,-1,-2,-3])
     ax.set_xticklabels(["1","1/10","1/100"])
-    ax.set_ylabel(r"Prob. of $>x$ infections",fontsize=10)
+    ax.set_ylabel(r"$P(X>x)$",fontsize=10)
 
     ax.text( 0.05,0.05
              , s = r"$\tau$ = {:.1f} [{:.2f}, {:.2f}]".format(2-abs(mle),2-abs(lower),2-abs(upper))
@@ -75,10 +76,10 @@ if __name__ == "__main__":
 
     mn,mx = ax.get_ylim()
     
-    ax.text( np.log10(Reff)*1.05
-             , (mn-mn)*0.25
+    ax.text( np.log10(Reff)*0.95
+             ,-1 
              , s = r"$\text{R}_{\text{eff}}$" + "= {:.1f}".format(Reff)
-             , ha="left",va="center"  )
+             , ha="right",va="top"  )
     ax.text(0.95,0.95,s="A.",fontsize=10,fontweight="bold",ha="right",va="top",transform=ax.transAxes)
     
     #---------------------------------------------------------------------
@@ -123,11 +124,20 @@ if __name__ == "__main__":
              , va="bottom"
              , transform=ax.transAxes )
 
+    #ax.set_ylabel(r"$P(X>x)$")
+    ax.set_ylabel("")
+    
+    ax.set_xlabel(r"Hours between infection",labelpad=0)
+
     ax.text(0.95,0.95,s="B.",fontsize=10,fontweight="bold",ha="right",va="top",transform=ax.transAxes)
+
+    ax.set_ylim(-3,0)
+    ax.set_yticks([0,-1,-2,-3])
+    ax.set_yticklabels([])
+    
 
     #--Tau over time
     ax = fig.add_subplot(gs[1,:])
-
 
     def from_vals_to_tau(x):
         
@@ -171,11 +181,55 @@ if __name__ == "__main__":
 
     ax.text(0.95,0.95,s="C.",fontsize=10,fontweight="bold",ha="right",va="top",transform=ax.transAxes)
 
+    ax.set_ylabel(r"$\tau$")
+    ax.set_xlabel("")
+    ax.set_xticks(np.arange(0,16+2,2))
+    ax.set_xticklabels([])
+    
     ax.set_ylim(1,1.5)
 
+
+    #--time until infection over time 
+    ax = fig.add_subplot(gs[2,:])
+
+    def exponential_rate_ci(samples, alpha=0.05):
+        from scipy.stats import chi2
+        n = len(samples)
+        total = np.sum(samples)
+        lam_hat = n / total
+        q_lower = chi2.ppf(alpha/2, 2 * n)
+        q_upper = chi2.ppf(1 - alpha/2, 2 * n)
+
+        ci_lower = q_lower / (2 * total)
+        ci_upper = q_upper / (2 * total)
+
+        return pd.DataFrame({"mle":[lam_hat],"lower":[ci_lower], "upper":[ci_upper]})
+
+    all_stats = pd.DataFrame()
+    for time in np.arange(0.5,17,0.5):
+        subset = T.loc[T.elapsed_days <= time]
+        stats  = exponential_rate_ci( subset.hours_between_infection.values)
+        stats["day"] = time
+        
+        all_stats = pd.concat([all_stats,stats])
+
+    ax.plot(all_stats.day.values,all_stats.mle.values, color="green")
+    ax.fill_between(all_stats.day.values, all_stats.lower.values,all_stats.upper.values,alpha=0.30,color="green")
+        
+    ax.axhline(float(stats.mle),color="black",ls="--")
+
+    ax.text(0.95,0.95,s="D.",fontsize=10,fontweight="bold",ha="right",va="top",transform=ax.transAxes)
+
+    ax.set_ylabel(r"$\lambda$")
+    ax.set_xlabel("Elapsed days since outbreak")
+    ax.set_xticks(np.arange(0,16+2,2))
+
+    #ax.set_ylim(1,1.5)
     
-    fig.set_tight_layout(True)
+    #fig.set_tight_layout(True)
     fig.set_size_inches( 8.5-2, 11./3 )
+    plt.subplots_adjust(hspace=0.5)
+    
     plt.savefig("./viz/epi_params_over_time/epi_distributions.pdf")
     plt.savefig("./viz/epi_params_over_time/epi_distributions.png", dpi=300)
     plt.close()
