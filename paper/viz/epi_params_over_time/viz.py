@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     ax.set_ylim(-3,0)
     ax.set_yticks([0,-1,-2,-3])
-    ax.set_yticklabels(["1","1/10","1/100"])
+    ax.set_yticklabels(["1","1/10","1/100","1/1000"])
     ax.set_ylabel(r"$P(X>x)$",fontsize=10)
 
     ax.text( 0.05,0.05
