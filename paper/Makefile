@@ -9,7 +9,7 @@ VENV_PYTHON := $(VENV_DIR)/bin/python -W ignore
 R ?= Rscript
 
 run: build_env format_data build_num_infects build_time_between_dataset build_transmission_network_object\
-viz_transmission_over_time viz_dist_epi_params
+build_timeseries_data viz_transmission_over_time viz_dist_epi_params viz_compartmental_model
 
 build_env:
 	@echo "build forecast environment"
@@ -33,6 +33,9 @@ build_transmission_network_object:
 	@echo "Build Transmission network in networkx"
 	@$(VENV_PYTHON) ./analysis_data/build_transmission_network.py
 
+build_timeseries_data:
+	@echo "Build Time series data"
+	@$(VENV_PYTHON) ./analysis_data/build_time_series_data.py
 
 viz_transmission_over_time:
 	@echo "Viz transmission network over time"
@@ -41,5 +44,13 @@ viz_transmission_over_time:
 viz_dist_epi_params:
 	@echo "Viz EPi Params"
 	@$(VENV_PYTHON) ./viz/epi_params_over_time/viz.py
+
+viz_compartmental_model:
+	@echo "Viz Compartment"
+	@$(VENV_PYTHON) ./viz/present_compartmental_wont_capture/data_for_viz.py
+	@$(VENV_PYTHON) ./viz/present_compartmental_wont_capture/viz.py
+
+
+
 
 
